@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 from pathlib import Path
+from corsheaders.defaults import default_headers
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -38,17 +39,32 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'rest_api.apps.RestApiConfig'
+    'rest_api.apps.RestApiConfig',
+    'corsheaders'
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+]
+
+
+# CORS_ORIGIN_ALLOW_ALL: If True,
+#       all origins will be accepted (not use the whitelist below). Defaults to False.
+CORS_ORIGIN_ALLOW_ALL = True
+
+#       Defaults to [].
+CORS_ORIGIN_WHITELIST = []
+
+# Need to add non http headers here to be accessible and prevent CORS errors
+CORS_ALLOW_HEADERS = list(default_headers) + [
+    'AccessToken',
 ]
 
 ROOT_URLCONF = 'bookmanager.urls'

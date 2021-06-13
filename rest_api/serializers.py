@@ -4,12 +4,15 @@ from rest_api.models import Author, Book
 class AuthorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Author
-        fields = ('id', 'first_name', 'last_name')
+        fields = ('author_id', 'first_name', 'last_name')
 
 class BookSerializer(serializers.ModelSerializer):
     # Include author details in the book model too, not just the id
-    author = AuthorSerializer(read_only=True)
-
     class Meta:
         model = Book
-        fields = ('id', 'name', 'isbn', 'author')
+        fields = ('book_id', 'name', 'isbn', 'author')
+    
+    def to_representation(self,instance):
+        response = super().to_representation(instance)
+        response['author'] = AuthorSerializer(instance.author).data
+        return response
